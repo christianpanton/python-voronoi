@@ -120,8 +120,30 @@ static PyMethodDef VoronoiMethods[] =
 };
  
 PyMODINIT_FUNC
+#if PY_MAJOR_VERSION >= 3
+PyInit_voronoi(void)
+#else
 initvoronoi(void)
+#endif
 {
-     (void) Py_InitModule("voronoi", VoronoiMethods);
+#if PY_MAJOR_VERSION >= 3
+    static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "voronoi",
+        "Voronoi Diagram Generator Python Wrapper.",
+        -1,
+        VoronoiMethods,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+#endif
+
+#if PY_MAJOR_VERSION >= 3
+    return PyModule_Create(&moduledef);
+#else
+    (void) Py_InitModule("voronoi", VoronoiMethods);
+#endif
 }
 
